@@ -1,0 +1,4 @@
+./data
+tasks.txt
+*__pycache__*
+*bkp
