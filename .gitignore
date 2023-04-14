@@ -1,4 +1,7 @@
-./data
-tasks.txt
-*__pycache__*
+**/data/
+**/models/
+**/img/
+*task.txt
+**/__pycache__*
 *bkp
+**/.env/
