@@ -1,20 +1,38 @@
-from control import classification as cls
-from control import generation as gen
-from control import dialog_control as dc
+# classificator
+# generator
+# dialog_control
 
-from interface import interface as ifc
+def get_replic():
+    str_ = input()
+    return str_;  
 
-if __name__ == "__main__":
-    classificator = cls.Classificator("../models/intent_catcher.pt")
-    print(classificator.intent_classification("привет"))
-    # generator = gen.Generator()
-    # dialog_ctrl = dc.DialogControl()
-    
-    # replic = "af"
-    # #  определим категорию высказывания
-    # category = classificator.classify(replic)
-    # ctrl = dialog_ctrl.getCtrlState(category)
-    # answer = generator.getAnswer(replic, category)
-    # # str = classificator.classify("Долгих Анатолий Андреевич ")
-    # # print(f"категория: {str}")
-    # # classificator.find_binary
+def post_process(replic):
+    text = replic.lstrip().rstrip().capitalize()
+    text = text.replace(" .", ".")
+    text = text.replace(" ,", ",")
+    text = text.replace(" !", "!")
+    text = text.replace(" ?", "?")
+    return text
+  
+# импортировали модуль классификатора
+import registrator.classification as cls
+import registrator.generation as gn
+
+# инициализация классификатора
+#classificator = cls.Classificator()
+print(gn.pathToModels)
+generator = gn.Registrator(gn.pathToModels + "/vocab.pt", 
+                           gn.pathToModels + "/generationModel.pth")
+
+replic = ""
+while(replic != "exit"):
+    # фаза 1 - получение реплики пользователя
+    print(f"Введите реплику")
+    replic = get_replic()
+    answer = generator.generateRegistratorAnswer(replic)
+    # фаза 2 - классифицировать полученную реплику
+    # (replic) --> [ classificator ] --> (category)
+    #category = classificator.classify(replic)
+    answer = post_process(answer)
+    print(f"{answer}")
+

@@ -1,3 +1,9 @@
+""" Данный модуль реализует функционал классификатора"""
+
+# Прописываем путь к моделям  
+import os
+pathToModels = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/'))
+
 import re
 import torch 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -25,10 +31,12 @@ reg_word = ["извините", "прощения",
 
 
 class Classificator():
-    def __init__(self, cls_path):
+    """Класс классификатора"""
+    
+    def __init__(self):
         print("\033[33m{}".format("Создание классификатора"))
         self.category = categories_dict
-        self.model = torch.load(cls_path, map_location=torch.device('cpu'))
+        self.model = torch.load(pathToModels + "\intent_catcher.pt", map_location=torch.device('cpu'))
         self.tokenizer = AutoTokenizer.from_pretrained('DeepPavlov/rubert-base-cased-sentence')
         print("\033[32m{}\033[0m".format("Модель классификатора загружена"))
         
@@ -71,11 +79,17 @@ class Classificator():
         return str(model_output)
       
     def classify(self, text):
-        if(self.find_name(text)):
+        # проверяем фио
+        if(self.name_classification(text)):
             return self.category["fio"]
-        else:
-            return self.category["unknown category"]
+        
+        text = text.lower().lstrip().rstrip()
+        # проверяем, какой у нас диалог
+        if(not self.bin_classification(text)):
+            return self.category["free_dialog"]
+        
+        return self.category[self.intent_classification(text)]
         
 if __name__ == "__main__":
     сl = Classificator()
-    
+    print(pathToModels + "\intent_catcher.pt")
