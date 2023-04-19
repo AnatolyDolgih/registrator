@@ -1,6 +1,13 @@
 # __Регистратор__
 
 ## __Структура проекта__
-[ноутбук с обучением классификатора](https://colab.research.google.com/drive/1vIEiNKA0sVDDiV9STLaRdYptahPuUrmL?usp=sharing)
 
-## __Инструкция по использованию__
+Проект регистратор включает в себя несколько струкутурных компонентов:
+
+* [_src_](https://github.com/AnatolyDolgih/registrator/tree/main/src) - исходный код проекта
+* [_notebooks_](https://github.com/AnatolyDolgih/registrator/tree/main/notebooks) - ноутбуки с обучением нейронных сетей
+* [_drawio_](https://github.com/AnatolyDolgih/registrator/tree/main/drawio) - схемы проекта
+
+## __Другие важные составляющие проекта__
+
+ Данные компоненты ввиду большого объема не размещены в репозитории и находятся в отдельной папке на гугл-диске. Для работоспособности системы их также необходимо скачать и положить в папку registrator

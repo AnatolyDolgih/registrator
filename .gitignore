@@ -1,7 +1,7 @@
 **/data/
 **/models/
 **/img/
-*task.txt
+*task*
 **/__pycache__*
 *bkp
 **/.env/

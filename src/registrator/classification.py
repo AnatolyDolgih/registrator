@@ -7,27 +7,8 @@ pathToModels = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../mo
 import re
 import torch 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import params as p
 
-
-categories_dict = {"free_dialog": 0, "fio": 1,
-                   "smalltalk_greetings": 2, 
-                   "smalltalk_bye": 3,
-                   "book_room": 4,
-                   "get_room": 5,
-                   "common_qstn": 6, 
-                   "no_category": 7}
-
-reg_word = ["извините", "прощения",
-            "добрый веч", "здравствуйте", "приве",
-            "нужен номер", "места", "остановиться", "номер",
-            "бронь на меня", "бронь на меня", "номер будет", "номер брони",
-            "будет забронирован", "бронь на меня", "бронь будет",
-            "да, пожалуйста", "не моя вина", "можно, побыстрее",
-            "одна ночь", "одну ночь", "номер на одного", "только я",
-            "никого нет", "я постою", "хорошо", "побыстрее", "я устал",
-            "нет проблем", "спешу", "подешевле", "большой", "маленький",
-            "средний", "отличное", "день был", "неплохо", "бронь"
-            ]
 
 
 class Classificator():
@@ -35,7 +16,7 @@ class Classificator():
     
     def __init__(self):
         print("\033[33m{}".format("Создание классификатора"))
-        self.category = categories_dict
+        self.category = p.categories_dict
         self.model = torch.load(pathToModels + "\intent_catcher.pt", map_location=torch.device('cpu'))
         self.tokenizer = AutoTokenizer.from_pretrained('DeepPavlov/rubert-base-cased-sentence')
         print("\033[32m{}\033[0m".format("Модель классификатора загружена"))
@@ -65,7 +46,7 @@ class Classificator():
         """
         text = text.lower().rstrip().lstrip()
         count = 0
-        for i in reg_word:
+        for i in p.reg_word:
             if (text.find(i) >= 0):
                 count += 1
         if (count > 0):
