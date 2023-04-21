@@ -244,10 +244,7 @@ class Generator():
                     check = False 
             return answer
         else:
-            text = replic
-            if category == 1:
-                text = "фио"
-            return self.registrator_bot.generateAnswer(text)
+            return self.registrator_bot.generateAnswer(replic)
 
 if __name__ == "__main__":
     gen = Generator()
