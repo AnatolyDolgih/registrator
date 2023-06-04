@@ -23,15 +23,32 @@ class Classificator():
         
     def name_classification(self, text):
         """Определяет, является ли text ФИО пользователя"""
-        text = str(text)
-        text.strip()
-        pattern = r'((\b[A-Я][^A-Я\s\.\,][a-я]*)(\s+)([A-Я][a-я]*)'+\
-        '(\.+\s*|\s+)([A-Я][a-я]*))'
-        name = re.findall(pattern, text)
-        if name:
-            return True
-        else: 
-            return False
+        fio = text.split(" ")
+        for l in fio:
+            f = open("D://registrator/registrator/data/male_name.txt", "r", encoding = 'utf-8')
+            for line in f:
+                a = line.strip().lower()
+                if (l == a):
+                    f.close()
+                    return True
+            
+            f = open("D://registrator/registrator/data/female_name.txt", "r", encoding = 'utf-8')
+            for line in f:
+                a = line.strip().lower()
+                if (l == a):
+                    f.close()
+                    return True
+        return False
+        # text = str(text)
+        # text.strip()
+        # pattern = r'((\b[A-Я][^A-Я\s\.\,][a-я]*)(\s+)([A-Я][a-я]*)'+\
+            
+        # '(\.+\s*|\s+)([A-Я][a-я]*))'
+        # name = re.findall(pattern, text)
+        # if name:
+        #     return True
+        # else: 
+        #     return False
     
     def bin_classification(self, text):
         """Определяет, относится ли данная реплика к теме заселения в отель

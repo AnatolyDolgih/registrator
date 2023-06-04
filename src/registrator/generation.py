@@ -18,6 +18,7 @@ from torchtext.vocab import build_vocab_from_iterator
 from typing import List
 from torchtext.data.utils import get_tokenizer
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import BertTokenizer, BertForSequenceClassification
 
 
 
@@ -228,23 +229,44 @@ class FreeBot:
         
         return result
 
+class ToxicFilter():
+    def __init__(self):
+        self.model = BertForSequenceClassification.from_pretrained('SkolkovoInstitute/russian_toxicity_classifier')
+        self.tokenizer = BertTokenizer.from_pretrained('SkolkovoInstitute/russian_toxicity_classifier')
+        
+    def check(self, replic):
+        if not filter(replic):
+            return False
+        
+        batch = self.tokenizer.encode(replic, return_tensors='pt')
+        logits = self.model(batch).logits
+        predicted_class_id = logits.argmax().item()
+        if (self.model.config.id2label[predicted_class_id] == 'toxic'):
+            return False
+        else:
+            return True
+
 class Generator():
     def __init__(self):
         self.registrator_bot = RegBot()
         self.free_bot = FreeBot()
+        self.toxic_filter = ToxicFilter()
         print("Генератор создан")
         pass
     
-    def generate(self, replic, category=0):
+    def generate(self, replic, category):
         if (category == 0):
             check = True
             while (check == True):
                 answer = self.free_bot.generateAnswer(replic)
-                if filter(answer):
+                if self.toxic_filter.check(answer):
                     check = False 
             return answer
         else:
-            return self.registrator_bot.generateAnswer(replic)
+            text = replic
+            if category == 1:
+                text = "фио"
+            return self.registrator_bot.generateAnswer(text)
 
 if __name__ == "__main__":
     gen = Generator()
